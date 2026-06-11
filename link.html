@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="ar" dir="ltr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource-variable/cairo@5/index.css">
+<title>AL-AMERI — رابط الطرف</title>
+<style>
+  /* mockup-links.html هو المرجع الملزم — نفس :root والكلاسات */
+  :root{
+    --bg:#F6F8FB; --card:#fff; --cardAlt:#F2F5F9; --border:#E6EAF2;
+    --t1:#0B1220; --t2:#5B6B81; --t3:#8A97A8;
+    --blue:#2563EB; --blueBg:#E8EFFD; --green:#16A34A; --greenBg:#E7F6EC;
+    --amber:#D97706; --amberBg:#FFF7E0; --red:#DC2626; --redBg:#FDEAEA;
+  }
+  *{box-sizing:border-box;font-family:"Cairo Variable","Cairo","Segoe UI",Tahoma,sans-serif;}
+  body{background:#E9EDF3;color:var(--t1);margin:0;padding:18px;font-size:13px;}
+  .b{font-weight:800;} .tiny{font-size:10.5px;} .muted{color:var(--t3);} .sp{flex:1;}
+  .zh{font-family:"Cairo Variable","PingFang SC","Microsoft YaHei",sans-serif;}
+  .phone{width:400px;max-width:96vw;margin:0 auto;background:var(--bg);border:1px solid var(--border);border-radius:26px;padding:14px;box-shadow:0 24px 60px rgba(16,24,40,.18);}
+  .view{display:none;} .view.on{display:block;}
+  .lhead{background:#fff;border:1px solid var(--border);border-radius:14px;padding:12px 14px;display:flex;align-items:center;gap:10px;margin-bottom:10px;}
+  .logoSq{width:36px;height:36px;border-radius:10px;background:var(--blue);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:900;font-size:13px;flex:0 0 36px;}
+  .card{background:#fff;border:1px solid var(--border);border-radius:13px;margin-bottom:10px;}
+  .pRow{padding:11px 13px;border-top:1px solid var(--border);}
+  .pRow:first-child{border-top:none;}
+  .pTop{display:flex;align-items:center;gap:9px;}
+  .pimg{width:34px;height:34px;border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:16px;flex:0 0 34px;background:var(--cardAlt);overflow:hidden;}
+  .pimg img{width:100%;height:100%;object-fit:cover;}
+  .fGrid{display:flex;gap:7px;margin-top:9px;flex-wrap:wrap;}
+  .fld{flex:1;min-width:84px;}
+  .fld label{display:block;font-size:9px;color:var(--t3);font-weight:800;margin-bottom:3px;}
+  .fld input{width:100%;padding:7px 9px;border:1px solid var(--border);border-radius:8px;font-size:12px;font-family:inherit;background:#fff;}
+  .fld.miss input{border-color:#F0C040;background:var(--amberBg);}
+  .fld.ro input{background:var(--cardAlt);color:var(--t3);pointer-events:none;}
+  .missTag{font-size:8.5px;color:var(--amber);font-weight:800;}
+  .qtyBox{display:flex;align-items:center;gap:7px;}
+  .qBtn{width:28px;height:28px;border-radius:8px;border:1px solid var(--border);background:#fff;font-size:15px;cursor:pointer;font-weight:800;}
+  .qVal{width:52px;text-align:center;padding:6px;border:1px solid var(--border);border-radius:8px;font-weight:800;font-size:13px;font-family:inherit;}
+  .del{margin-left:auto;border:none;background:none;font-size:15px;cursor:pointer;opacity:.6;}
+  .pRow.removed{opacity:.4;}
+  .pRow.removed .pname{text-decoration:line-through;}
+  .submitBtn{width:100%;padding:13px;border:none;border-radius:12px;background:var(--green);color:#fff;font-size:14px;font-weight:900;cursor:pointer;font-family:inherit;}
+  .submitBtn:disabled{opacity:.5;cursor:default;}
+  .joinBox{margin-top:12px;text-align:center;padding:13px;border:1px dashed var(--border);border-radius:12px;background:#fff;}
+  .joinBtn{margin-top:7px;padding:8px 18px;border-radius:9px;border:1px solid var(--blue);color:var(--blue);background:var(--blueBg);font-weight:800;font-size:11.5px;cursor:pointer;font-family:inherit;}
+  .totLine{display:flex;align-items:center;padding:11px 14px;font-weight:900;font-size:13.5px;border-top:1px solid var(--border);flex-wrap:wrap;gap:4px 14px;}
+  .noteArea{width:100%;border:1px solid var(--border);border-radius:10px;padding:9px 11px;font-size:12px;font-family:inherit;resize:vertical;min-height:54px;}
+  .doneScr{text-align:center;padding:40px 16px;display:none;}
+  .doneScr.on{display:block;}
+  .toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:#0B1220;color:#fff;padding:10px 18px;border-radius:10px;font-size:12px;font-weight:700;opacity:0;transition:.3s;z-index:9;white-space:nowrap;}
+  .toast.on{opacity:1;}
+  .photoBtn{margin-top:6px;display:inline-flex;align-items:center;gap:5px;padding:5px 11px;border:1px dashed var(--border);border-radius:8px;background:#fff;font-size:10.5px;color:var(--t2);cursor:pointer;font-weight:700;}
+  .photoThumb{width:34px;height:34px;border-radius:7px;object-fit:cover;border:1px solid var(--border);margin-top:5px;margin-inline-end:4px;}
+  .expScr{text-align:center;padding:46px 16px;}
+  .saveDot{font-size:9.5px;color:var(--green);font-weight:800;}
+</style>
+</head>
+<body>
+<div class="phone" id="app">
+  <div style="text-align:center;padding:50px 10px;color:var(--t3);font-size:12px" id="loading">… جارٍ التحميل · 加载中</div>
+</div>
+<div class="toast" id="toast"></div>
+
+<script>
+/* ════ helpers ════ */
+let tt; function toast(m){const t=document.getElementById('toast');t.textContent=m;t.classList.add('on');clearTimeout(tt);tt=setTimeout(()=>t.classList.remove('on'),2400);}
+const qs=new URLSearchParams(location.search);
+const TOKEN=qs.get('t')||'', SB_URL=(qs.get('u')||'').replace(/\/+$/,''), SB_KEY=qs.get('k')||'';
+const H={apikey:SB_KEY, Authorization:'Bearer '+SB_KEY, 'Content-Type':'application/json'};
+const money=n=>'¥'+Math.round(n).toLocaleString('en-US');
+const esc=s=>String(s==null?'':s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+
+async function rpc(fn, args){
+  const r=await fetch(SB_URL+'/rest/v1/rpc/'+fn,{method:'POST',headers:H,body:JSON.stringify(args)});
+  if(!r.ok) throw new Error('HTTP '+r.status);
+  return r.json();
+}
+
+/* ════ state ════ */
+let LK=null;                 // صف الرابط {kind,lang,payload,allowed,response,status,...}
+const resp={fields:{}, qty:{}, deleted:[], actual:{}, readyDate:null, photos:{}, notes:'', confirmedAt:null};
+let saveTimer=null, dirty=false;
+
+function mergePrevResponse(){
+  const r=LK.response||{};
+  ['fields','qty','actual','photos'].forEach(k=>{ if(r[k]) Object.assign(resp[k], r[k]); });
+  if(Array.isArray(r.deleted)) resp.deleted=r.deleted.slice();
+  if(r.readyDate) resp.readyDate=r.readyDate;
+  if(r.notes) resp.notes=r.notes;
+}
+
+/* حفظ تلقائي (partial) — لو قفل الجوال ما يضيع شي */
+function autosave(){
+  dirty=true;
+  clearTimeout(saveTimer);
+  saveTimer=setTimeout(async()=>{
+    try{
+      const r=await rpc('link_save',{p_token:TOKEN,p_response:resp,p_submit:false});
+      if(r&&r.ok){ dirty=false; const el=document.getElementById('saveDot'); if(el){el.textContent=LK.lang==='zh'?'✓ 已自动保存':'✓ حُفظ تلقائياً'; setTimeout(()=>{el.textContent='';},2000);} }
+    }catch(e){}
+  },800);
+}
+
+async function submitAll(btn){
+  btn.disabled=true;
+  resp.confirmedAt=new Date().toISOString();
+  try{
+    const r=await rpc('link_save',{p_token:TOKEN,p_response:resp,p_submit:true});
+    if(!(r&&r.ok)) throw new Error((r&&r.error)||'failed');
+    document.querySelectorAll('.card,.submitBtn,#formArea').forEach(c=>c.style.display='none');
+    document.getElementById('doneScr').classList.add('on');
+    const jb=document.querySelector('.joinBox'); if(jb) jb.style.display='block';
+  }catch(e){ btn.disabled=false; toast(LK.lang==='zh'?'提交失败，请重试':'تعذّر الإرسال — حاول مجدداً'); }
+}
+
+/* تسجيل اهتمام الانضمام (برقم الجوال) — في جدول طلبات الانضمام الموجود */
+async function joinUs(){
+  const zh=LK&&LK.lang==='zh';
+  const phone=prompt(zh?'请输入手机号：':'أدخل رقم جوالك:');
+  if(!phone) return;
+  try{
+    await fetch(SB_URL+'/rest/v1/yiwu_supplier_signup',{method:'POST',headers:{...H,Prefer:'return=minimal'},
+      body:JSON.stringify({company:(LK&&LK.party_name)||'', supplier_name:(LK&&LK.party_name)||'', phone:phone, note:'انضمام عبر رابط '+((LK&&LK.kind)||'')+' · '+((LK&&LK.order_number)||''), created_at:new Date().toISOString()})});
+    toast(zh?'已收到，我们会联系你 ✓':'استلمنا رقمك — بنتواصل معك ✓');
+  }catch(e){ toast(zh?'失败，请重试':'تعذّر — حاول مجدداً'); }
+}
+
+/* رفع صورة: ضغط ثم Supabase storage، وإن فشل → base64 داخل الرد */
+function pickPhoto(rowKey){
+  const inp=document.createElement('input'); inp.type='file'; inp.accept='image/*';
+  inp.onchange=()=>{
+    const f=inp.files&&inp.files[0]; if(!f) return;
+    const rd=new FileReader();
+    rd.onload=()=>{ const img=new Image(); img.onload=async()=>{
+      const max=900, r=Math.min(1,max/Math.max(img.width,img.height));
+      const cv=document.createElement('canvas'); cv.width=Math.round(img.width*r); cv.height=Math.round(img.height*r);
+      cv.getContext('2d').drawImage(img,0,0,cv.width,cv.height);
+      const dataUrl=cv.toDataURL('image/jpeg',.72);
+      let stored=dataUrl;
+      try{
+        const blob=await (await fetch(dataUrl)).blob();
+        const path='link-uploads/'+TOKEN+'/'+rowKey+'-'+Date.now()+'.jpg';
+        const up=await fetch(SB_URL+'/storage/v1/object/'+path,{method:'POST',headers:{apikey:SB_KEY,Authorization:'Bearer '+SB_KEY,'Content-Type':'image/jpeg'},body:blob});
+        if(up.ok) stored=SB_URL+'/storage/v1/object/public/'+path;
+      }catch(e){}
+      (resp.photos[rowKey]=resp.photos[rowKey]||[]).push(stored);
+      const holder=document.getElementById('ph-'+rowKey);
+      if(holder){ const im=document.createElement('img'); im.className='photoThumb'; im.src=stored; holder.appendChild(im); }
+      autosave(); toast(LK.lang==='zh'?'📷 已添加照片':'📷 أُضيفت الصورة');
+    }; img.src=rd.result; };
+    rd.readAsDataURL(f);
+  };
+  inp.click();
+}
+
+/* ════ الرؤوس المشتركة ════ */
+function lheadHTML(){
+  const zh=LK.lang==='zh';
+  const days=LK.expires_at?Math.max(0,Math.ceil((new Date(LK.expires_at)-Date.now())/864e5)):7;
+  const brand=zh?'阿米里贸易 AL-AMERI':'AL-AMERI للتجارة';
+  const sub=zh
+    ? '订单 '+esc(LK.order_number||'')+' · '+esc(LK.party_name||'')+' 您好 👋'
+    : (LK.kind==='customer_confirm'?'عرض سعر ':'طلب ')+esc(LK.order_number||'')+' · '+esc(LK.party_name||'')+'، أهلاً 👋';
+  return '<div class="lhead'+(zh?' zh':'')+'"><div class="logoSq">AA</div><div style="flex:1"><div class="b" style="font-size:13px">'+brand+'</div><div class="tiny muted">'+sub+'</div></div><span class="tiny" style="color:var(--amber);font-weight:800">⏳ '+(zh?days+'天有效':'صالح '+days+' أيام')+'</span></div>'
+    +'<div style="text-align:left;padding:0 4px 6px"><span class="saveDot" id="saveDot"></span></div>';
+}
+function joinHTML(){
+  const zh=LK.lang==='zh';
+  return zh
+    ? '<div class="joinBox zh"><div class="tiny b">想要所有订单一目了然？</div><div class="tiny muted">所有客户订单、货号、收款 — 一个地方</div><button class="joinBtn" onclick="joinUs()">📱 用手机号加入我们</button></div>'
+    : '<div class="joinBox"><div class="tiny b">تبي كل طلباتك وشحناتك بمكان واحد؟</div><button class="joinBtn" onclick="joinUs()">📱 انضم — التسجيل برقم جوالك</button></div>';
+}
+function doneHTML(){
+  const zh=LK.lang==='zh';
+  return '<div class="doneScr'+(zh?' zh':'')+'" id="doneScr"><div style="font-size:40px">🎉</div><div class="b" style="font-size:15px;margin-top:8px">'+(zh?'已提交，谢谢！':'تم تأكيد طلبك!')+'</div><div class="tiny muted" style="margin-top:4px">'+(zh?'AL-AMERI 会马上审核您填写的信息':'وصلت تعديلاتك لـ AL-AMERI وستُعتمد خلال ساعات')+'</div></div>';
+}
+function expiredHTML(){
+  const zh=LK&&LK.lang==='zh';
+  return '<div class="expScr"><div style="font-size:40px">⌛</div><div class="b" style="font-size:15px;margin-top:8px">'+(zh?'链接已过期':'انتهت صلاحية الرابط')+'</div><div class="tiny muted" style="margin-top:5px">'+(zh?'请联系 AL-AMERI 获取新链接':'اطلب رابطاً جديداً من AL-AMERI')+'</div></div>';
+}
+
+/* ════ صفحة المحل: كمّل النواقص (supplier_fill — صيني) ════ */
+const SUP_FLD={costPrice:{zh:'单价 ¥',key:'costPrice',step:'0.01'},cbm:{zh:'体积 CBM/箱',key:'cbm',step:'0.001'},huohao:{zh:'你们的货号',key:'huohao',text:true}};
+function renderSupplier(){
+  const P=LK.payload||{}; const rows=P.rows||[];
+  const allowed=(LK.allowed&&LK.allowed.perRow)||{};
+  let h=lheadHTML();
+  h+='<div class="card zh"><div style="padding:11px 13px;font-size:12px;font-weight:800;background:var(--amberBg);border-radius:13px 13px 0 0">⚠️ 请补全 <b style="color:var(--amber)">黄色</b> 缺失信息（'+rows.length+'个产品）— 填写自动保存</div>';
+  rows.forEach(r=>{
+    const need=allowed[r.k]||[];
+    const prev=(resp.fields[r.k])||{};
+    h+='<div class="pRow"><div class="pTop"><span class="pimg">'+(r.img?'<img src="'+esc(r.img)+'">':'📦')+'</span><div style="flex:1"><div class="b pname">'+esc(r.name||'—')+'</div><div class="tiny muted">'
+      +(r.huohao?'你们的货号: <b>'+esc(r.huohao)+'</b>':'你们的货号: <b style="color:var(--amber)">请填写 ↓</b>')+'</div></div></div><div class="fGrid">'
+      +'<div class="fld ro"><label>数量/箱</label><input value="'+esc(r.pkg||'')+'"></div>';
+    ['huohao','costPrice','cbm'].forEach(fk=>{
+      const meta=SUP_FLD[fk]; const cur=r[fk];
+      const isMiss=need.includes(fk);
+      const val=(prev[fk]&&prev[fk]['new']!=null)?prev[fk]['new']:(cur==null?'':cur);
+      if(isMiss) h+='<div class="fld miss"><label>'+meta.zh+' <span class="missTag">缺</span></label><input '+(meta.text?'':'inputmode="decimal" type="number" step="'+meta.step+'"')+' placeholder="'+(meta.text?'HT-…':'?')+'" value="'+esc(val===0?'':val)+'" data-f="'+fk+'" data-k="'+esc(r.k)+'"></div>';
+      else h+='<div class="fld ro"><label>'+meta.zh+'</label><input value="'+esc(cur==null?'—':cur)+'"></div>';
+    });
+    h+='</div><div class="photoBtn" onclick="pickPhoto(\''+esc(r.k)+'\')">📷 上传照片</div><div id="ph-'+esc(r.k)+'">'
+      +((resp.photos[r.k]||[]).map(u=>'<img class="photoThumb" src="'+esc(u)+'">').join(''))+'</div></div>';
+  });
+  const rdPrev=resp.readyDate&&resp.readyDate['new']?resp.readyDate['new']:(P.readyDate||'');
+  h+='<div class="pRow"><div class="fld"><label>预计备货日期 📅</label><input type="date" id="readyDate" value="'+esc(rdPrev)+'"></div>'
+    +'<div style="margin-top:8px"><label class="tiny muted zh" style="font-weight:800">备注 📝</label><textarea class="noteArea zh" id="noteArea" placeholder="有什么要告诉我们的...">'+esc(resp.notes||'')+'</textarea></div></div></div>';
+  h+='<button class="submitBtn zh" id="submitBtn">✓ 提交给 AL-AMERI</button>'+joinHTML()+doneHTML();
+  mount(h,'zh','ltr');
+  // wiring: كل تغيير يسجّل {old,new} ويحفظ تلقائياً
+  document.querySelectorAll('input[data-f]').forEach(inp=>inp.addEventListener('input',()=>{
+    const k=inp.dataset.k, f=inp.dataset.f;
+    const row=rows.find(x=>String(x.k)===String(k))||{};
+    (resp.fields[k]=resp.fields[k]||{})[f]={old:row[f]==null?'':row[f], 'new':inp.value};
+    autosave();
+  }));
+  document.getElementById('readyDate').addEventListener('change',e=>{ resp.readyDate={old:P.readyDate||'', 'new':e.target.value}; autosave(); });
+  document.getElementById('noteArea').addEventListener('input',e=>{ resp.notes=e.target.value; autosave(); });
+  document.getElementById('submitBtn').addEventListener('click',function(){
+    // الناقص الأصفر إلزامي
+    const missing=[...document.querySelectorAll('.fld.miss input')].filter(i=>!String(i.value).trim());
+    if(missing.length){ toast('还有 '+missing.length+' 个黄色字段未填写'); missing[0].focus(); return; }
+    submitAll(this);
+  });
+}
+
+/* ════ صفحة العميل: أكّد الطلب (customer_confirm — عربي، بلغة الكرتون) ════ */
+function renderCustomer(){
+  const P=LK.payload||{}; const rows=P.rows||[];
+  let h=lheadHTML();
+  h+='<div class="card"><div style="padding:11px 13px;font-size:12px;font-weight:800;background:var(--blueBg);border-radius:13px 13px 0 0">راجع طلبك — عدّل الكميات أو احذف ما لا تريده، ثم أكّد ✓</div>';
+  rows.forEach(r=>{
+    const priceCtn=(Number(r.pkg)||0)*(Number(r.price)||0);   // سعر الكرتون (القانون 11)
+    const qPrev=resp.qty[r.k]&&resp.qty[r.k]['new']!=null?resp.qty[r.k]['new']:r.ctn;
+    const removed=resp.deleted.includes(String(r.k));
+    h+='<div class="pRow'+(removed?' removed':'')+'" data-k="'+esc(r.k)+'" data-pc="'+priceCtn+'" data-cbm="'+(Number(r.cbmCtn)||0)+'">'
+      +'<div class="pTop"><span class="pimg">'+(r.img?'<img src="'+esc(r.img)+'">':'📦')+'</span>'
+      +'<div style="flex:1"><div class="b pname">'+esc(r.name||'—')+'</div>'
+      +'<div class="tiny muted">📦 التعبئة <b>'+esc(r.pkg||0)+' حبة/كرتون</b> · 📐 <b>'+(Number(r.cbmCtn)||0).toFixed(2)+'</b> CBM/كرتون · <b>'+money(priceCtn)+'</b>/كرتون</div></div>'
+      +'<button class="del" title="حذف">'+(removed?'↺':'🗑')+'</button></div>'
+      +'<div class="qtyBox" style="margin-top:8px"><span class="tiny b">كم كرتون؟</span>'
+      +'<button class="qBtn minus">−</button><input class="qVal" inputmode="numeric" value="'+esc(qPrev)+'"><button class="qBtn plus">＋</button>'
+      +'<span class="sp"></span><span class="tiny muted lineC">—</span><span class="tiny b lineT">—</span></div></div>';
+  });
+  h+='<div class="totLine">الإجمالي<span class="sp"></span><span><b id="custCtn" style="font-size:13px">0</b> كرتون</span><span><b id="custCbm" style="font-size:13px">0</b> CBM</span><span id="custTotal" style="color:var(--blue)">¥0</span></div></div>';
+  h+='<div class="card" style="padding:11px 13px"><label class="tiny muted b">ملاحظاتك (اختياري)</label><textarea class="noteArea" id="noteArea" placeholder="أي تعديل أو طلب خاص...">'+esc(resp.notes||'')+'</textarea></div>';
+  h+='<button class="submitBtn" id="submitBtn">✓ أكّد الطلب</button>'+joinHTML()+doneHTML();
+  mount(h,'','rtl');
+
+  function recalc(){ let t=0,tc=0,tb=0;
+    document.querySelectorAll('.pRow[data-k]').forEach(rEl=>{
+      const q=+rEl.querySelector('.qVal').value||0;
+      const v=q*(+rEl.dataset.pc), b=q*(+rEl.dataset.cbm);
+      rEl.querySelector('.lineT').textContent=money(v);
+      rEl.querySelector('.lineC').textContent=b.toFixed(1)+' CBM';
+      if(rEl.classList.contains('removed'))return;
+      t+=v; tc+=q; tb+=b;
+    });
+    document.getElementById('custTotal').textContent=money(t);
+    document.getElementById('custCtn').textContent=tc;
+    document.getElementById('custCbm').textContent=tb.toFixed(1);
+  }
+  document.querySelectorAll('.pRow[data-k]').forEach(rEl=>{
+    const k=rEl.dataset.k;
+    const row=rows.find(x=>String(x.k)===String(k))||{};
+    const q=rEl.querySelector('.qVal');
+    const track=()=>{ resp.qty[k]={old:row.ctn, 'new':+q.value||0}; autosave(); recalc(); };
+    rEl.querySelector('.plus').addEventListener('click',()=>{ q.value=+q.value+1; track(); });
+    rEl.querySelector('.minus').addEventListener('click',()=>{ q.value=Math.max(0,+q.value-1); track(); });
+    q.addEventListener('input',track);
+    rEl.querySelector('.del').addEventListener('click',function(){
+      if(rEl.classList.contains('removed')){ rEl.classList.remove('removed'); this.textContent='🗑'; resp.deleted=resp.deleted.filter(x=>x!==String(k)); }
+      else { rEl.classList.add('removed'); this.textContent='↺'; resp.deleted.push(String(k)); toast('حُذف — اضغط ↺ للتراجع'); }
+      autosave(); recalc();
+    });
+  });
+  document.getElementById('noteArea').addEventListener('input',e=>{ resp.notes=e.target.value; autosave(); });
+  document.getElementById('submitBtn').addEventListener('click',function(){ submitAll(this); });
+  recalc();
+}
+
+/* ════ صفحة بيانات الاستلام (receiving — صيني) ════ */
+function renderReceiving(){
+  const P=LK.payload||{}; const rows=P.rows||[];
+  let h=lheadHTML();
+  h+='<div class="card zh"><div style="padding:11px 13px;font-size:12px;font-weight:800;background:var(--greenBg);border-radius:13px 13px 0 0">📥 请确认备货 + 填写实际交付箱数（装箱单）</div>';
+  rows.forEach(r=>{
+    const aPrev=resp.actual[r.k]&&resp.actual[r.k]['new']!=null?resp.actual[r.k]['new']:'';
+    h+='<div class="pRow"><div class="pTop"><span class="pimg">'+(r.img?'<img src="'+esc(r.img)+'">':'📦')+'</span><div style="flex:1"><div class="b pname">'+esc(r.name||'—')+'</div><div class="tiny muted">'+(r.huohao?('货号 '+esc(r.huohao)+' · '):'')+'计划 <b>'+esc(r.ctn||0)+'</b> 箱</div></div></div>'
+      +'<div class="fGrid"><div class="fld ro"><label>计划箱数</label><input value="'+esc(r.ctn||0)+'"></div>'
+      +'<div class="fld miss"><label>实际交付箱数 <span class="missTag">填</span></label><input type="number" inputmode="numeric" placeholder="?" value="'+esc(aPrev)+'" data-act="'+esc(r.k)+'"></div></div></div>';
+  });
+  const rdPrev=resp.readyDate&&resp.readyDate['new']?resp.readyDate['new']:(P.readyDate||'');
+  h+='<div class="pRow"><div class="fld"><label>确认备货/交付日期 📅</label><input type="date" id="readyDate" value="'+esc(rdPrev)+'"></div>'
+    +'<div style="margin-top:8px"><label class="tiny muted zh" style="font-weight:800">装箱单/备注 📝</label><textarea class="noteArea zh" id="noteArea" placeholder="装箱单明细...">'+esc(resp.notes||'')+'</textarea></div>'
+    +'<div class="photoBtn" onclick="pickPhoto(\'packing\')">📷 上传装箱单照片</div><div id="ph-packing">'+((resp.photos['packing']||[]).map(u=>'<img class="photoThumb" src="'+esc(u)+'">').join(''))+'</div></div></div>';
+  h+='<button class="submitBtn zh" id="submitBtn">✓ 确认提交</button>'+joinHTML()+doneHTML();
+  mount(h,'zh','ltr');
+  document.querySelectorAll('input[data-act]').forEach(inp=>inp.addEventListener('input',()=>{
+    const k=inp.dataset.act; const row=rows.find(x=>String(x.k)===String(k))||{};
+    resp.actual[k]={old:Number(row.ctn)||0, 'new':+inp.value||0}; autosave();
+  }));
+  document.getElementById('readyDate').addEventListener('change',e=>{ resp.readyDate={old:P.readyDate||'', 'new':e.target.value}; autosave(); });
+  document.getElementById('noteArea').addEventListener('input',e=>{ resp.notes=e.target.value; autosave(); });
+  document.getElementById('submitBtn').addEventListener('click',function(){
+    const empty=[...document.querySelectorAll('input[data-act]')].filter(i=>!String(i.value).trim());
+    if(empty.length){ toast('还有 '+empty.length+' 个产品未填实际箱数'); empty[0].focus(); return; }
+    submitAll(this);
+  });
+}
+
+function mount(html, zhClass, dir){
+  const app=document.getElementById('app');
+  app.innerHTML=html;
+  app.dir=dir;
+  if(zhClass) app.classList.add(zhClass); else app.classList.remove('zh');
+}
+
+/* ════ init ════ */
+(async function(){
+  const app=document.getElementById('app');
+  if(!TOKEN||!SB_URL||!SB_KEY){ app.innerHTML='<div class="expScr"><div style="font-size:40px">🔗</div><div class="b" style="margin-top:8px">رابط غير مكتمل</div><div class="tiny muted" style="margin-top:5px">Link parameters missing (t / u / k)</div></div>'; return; }
+  try{
+    const r=await rpc('link_fetch',{p_token:TOKEN});
+    if(!r||r.ok===false){
+      LK=r||{};
+      app.innerHTML = (r&&r.error==='expired') ? expiredHTML() : '<div class="expScr"><div style="font-size:40px">❓</div><div class="b" style="margin-top:8px">الرابط غير موجود · 链接不存在</div></div>';
+      return;
+    }
+    LK=r;
+    document.title=(LK.lang==='zh'?'阿米里贸易 AL-AMERI · ':'AL-AMERI · ')+(LK.order_number||'');
+    mergePrevResponse();
+    if(LK.kind==='supplier_fill') renderSupplier();
+    else if(LK.kind==='customer_confirm') renderCustomer();
+    else renderReceiving();
+    if(LK.status==='submitted'||LK.status==='approved'){
+      toast(LK.lang==='zh'?'您已提交过 — 可再次修改并提交':'سبق أن أرسلت — يمكنك التعديل والإرسال مجدداً');
+    }
+  }catch(e){
+    app.innerHTML='<div class="expScr"><div style="font-size:40px">📡</div><div class="b" style="margin-top:8px">تعذّر الاتصال · 网络错误</div><div class="tiny muted" style="margin-top:5px">'+esc(e.message)+'</div></div>';
+  }
+})();
+</script>
+</body>
+</html>
